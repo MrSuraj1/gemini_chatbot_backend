@@ -1,4 +1,3 @@
-// utils/api.js
 
 require("dotenv").config();
 const { GoogleGenAI } = require("@google/genai");
@@ -23,3 +22,4 @@ const generateAIResponse = async (prompt) => {
 };
 
 module.exports = generateAIResponse;
+//gemini ka api tarika -- 
