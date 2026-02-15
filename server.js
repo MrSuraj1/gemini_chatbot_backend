@@ -13,7 +13,17 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+
 app.use(express.json());
+
+
+app.use((req, res, next) => {
+  console.log(`🚀 ${req.method} request to: ${req.url}`);
+  console.log("Body:", req.body); // Check if data is coming from frontend
+  next();
+});
+
+
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/chat", require("./routes/chatroute"));
