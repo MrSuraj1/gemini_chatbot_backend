@@ -22,4 +22,3 @@ const generateAIResponse = async (prompt) => {
 };
 
 module.exports = generateAIResponse;
-//gemini ka api tarika -- 

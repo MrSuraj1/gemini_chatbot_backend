@@ -8,7 +8,7 @@ const ai = new GoogleGenAI({
 async function run() {
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",   // 👈 EXACT model name
+      model: "gemini-2.5-flash",   
       contents: "Hello bhai kaise ho?",
     });
 
