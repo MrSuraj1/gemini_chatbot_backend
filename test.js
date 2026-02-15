@@ -8,7 +8,7 @@ const ai = new GoogleGenAI({
 async function run() {
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",   
+      model: "gemini-2.5-flash",   // 👈 EXACT model name
       contents: "Hello bhai kaise ho?",
     });
 
@@ -20,4 +20,3 @@ async function run() {
 }
 
 run();
-// api test karne ka tarika 
