@@ -1,59 +1,40 @@
-// // utils/api.js
-
-// require("dotenv").config();
-// const { GoogleGenAI } = require("@google/genai");
-
-// const ai = new GoogleGenAI({
-//   apiKey: process.env.GEMINI_API_KEY,
-// });
-
-// const generateAIResponse = async (prompt) => {
-//   try {
-//     const response = await ai.models.generateContent({
-//       model: "gemini-2.5-flash",
-//       contents: prompt,
-//     });
-
-//     return response.text;
-
-//   } catch (error) {
-//     console.error("🔥 FULL GEMINI ERROR:", error);
-//     throw new Error("AI response failed");
-//   }
-// };
-
-// module.exports = generateAIResponse;
-
 require("dotenv").config();
-// Standard package name aksar @google/generative-ai hota hai
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// Gemini AI Setup
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const generateAIResponse = async (prompt) => {
   try {
-    // 1.5-flash use karein, iski free limit 15 requests per minute hai
+    // Model name check: "gemini-1.5-flash" (Latest stable)
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    // Request bhejna
+    // Request format: Prompt ko parts mein bhejna zyada stable hota hai
     const result = await model.generateContent(prompt);
-    const response = await result.response;
+    
+    // Response handle karne ka naya tarika
+    const response = result.response;
     const text = response.text();
+
+    if (!text) {
+        throw new Error("Empty AI response");
+    }
 
     return text;
 
   } catch (error) {
-    // Console mein check karne ke liye detailed log
     console.error("🔥 GEMINI API DETAILS:", error);
 
-    // Agar limit khatam ho gayi ho (Error 429)
-    if (error.status === 429 || error.message?.includes("429")) {
-      throw new Error("Quota Exceeded: Aaj ki limit khatam ho gayi hai. Kal try karein ya API key badlein.");
+    // Rate limit handling
+    if (error.status === 429) {
+      throw new Error("Quota Exceeded: Kal try karein.");
+    }
+    
+    // Model not found ya authentication issue
+    if (error.status === 404) {
+        throw new Error("Model Not Found: Model name ya API key check karein.");
     }
 
-    // Baaki kisi bhi error ke liye
-    throw new Error("AI response generation mein issue aaya hai.");
+    throw new Error("AI response failed");
   }
 };
 
